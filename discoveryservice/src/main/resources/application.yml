@@ -9,3 +9,7 @@ eureka:
   client:
     fetch-registry: false       # client 등록 X
     register-with-eureka: false
+  server:
+    # response-cache-update-interval-ms: 30000 # 유레카 서버의 캐싱 업데이트 주기 - 기본 30초
+    enable-self-preservation: false # 일시적인 네트워크 장애로 인한 서비스 해제 막기 위한 자기 보호 모드 (운영시 true 개발시 false)
+
