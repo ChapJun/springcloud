@@ -1,0 +1,44 @@
+server:
+  port: 0
+
+logging:
+  level:
+    com.chapjun.ordersservice : INFO
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+
+spring:
+  application:
+    name: order-service
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update # 컬럼 추가는 되지만, 삭제는 안됨.
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:~/order
+    username: sa
+    password:
+
+management:
+  endpoint:
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: info,health,shutdown
+      base-path: "/order-service/actuator"
