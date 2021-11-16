@@ -3,6 +3,7 @@ package com.chapjun.userservice.jpa;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -23,4 +24,6 @@ public class UserEntity {
     @Column(nullable = false, unique = true)
     private String encryptedPwd;
 
+    @Column(nullable = true)
+    private BigDecimal curBal;
 }

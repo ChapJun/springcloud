@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,6 +78,20 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public UserDto deleteByUserId(String userId) {
+
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        if(userEntity == null) {
+            throw new UsernameNotFoundException("User Not Found");
+        }
+
+        userRepository.delete(userEntity);
+        UserDto userDto = new ModelMapper().map(userEntity, UserDto.class);
+
+        return userDto;
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         UserEntity userEntity = userRepository.findByEmail(email);
@@ -86,5 +101,30 @@ public class UserServiceImpl implements UserService{
         return new User(userEntity.getEmail(), userEntity.getEncryptedPwd(),
                 true, true, true, true,
                 new ArrayList<>());
+    }
+
+    @Override
+    @Transactional
+    //@Transactional(propagation = , isolation = ,noRollbackFor = ,readOnly = ,rollbackFor = ,timeout = )
+    public UserDto modifyUser(UserDto userDto) {
+
+        UserEntity userEntity = userRepository.findByUserId(userDto.getUserId());
+
+        if(userEntity == null) {
+            throw new UsernameNotFoundException("User Not Found");
+        }
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+        userEntity.setEmail(userDto.getEmail());
+        userEntity.setName(userDto.getName());
+
+        if(userDto.getCurBal() != null)
+            userEntity.setCurBal(userDto.getCurBal());
+
+        userEntity.setEncryptedPwd(bCryptPasswordEncoder.encode(userDto.getPassword()));
+        userRepository.save(userEntity);
+
+        return mapper.map(userEntity, UserDto.class);
     }
 }

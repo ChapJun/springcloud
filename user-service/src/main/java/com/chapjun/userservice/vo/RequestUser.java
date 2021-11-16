@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 
 @Data
 public class RequestUser {
@@ -21,4 +22,6 @@ public class RequestUser {
     @NotNull(message = "Password cannot be null")
     @Size(min=8, message= "Password must be equal or greater then 8 characters")
     private String password;
+
+    private BigDecimal curBal;
 }
