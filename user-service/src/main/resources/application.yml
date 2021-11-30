@@ -46,13 +46,13 @@ management:
   endpoints:
     web:
       exposure:
-        include: info,health,shutdown
+        include: info,health,shutdown,refresh,beans
       base-path: "/actuator"
 
 logging:
   level:
     com.chapjun.userservice: DEBUG
 
-token:
-  expiration_time: 86400000 # 1 day
-  secret: user_token
+#token:
+#  expiration_time: 86400000 # 1 day
+#  secret: user_token

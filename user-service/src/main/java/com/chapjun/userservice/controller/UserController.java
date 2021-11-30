@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,12 @@ public class UserController {
 
     @GetMapping("/health_check")
     public String status() {
-        return "It's Working in User Service. Server Port : " + env.getProperty("local.server.port") ;
+
+        return "It's Working in User Service."
+                + " Local Server port : " + env.getProperty("local.server.port")
+                + " Config Server port : " + env.getProperty("server.port")
+                + " Token Secret : " + env.getProperty("token.secret")
+                + " Token expiration time : " + env.getProperty("token.expiration_time");
     }
 
     @GetMapping("/welcome")
@@ -58,6 +64,7 @@ public class UserController {
     }
 
     @GetMapping("/users")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<List<ResponseUser>> getUsers() {
         Iterable<UserEntity> userList = userService.getUserAll();
 
