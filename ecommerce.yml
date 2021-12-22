@@ -7,3 +7,6 @@ gateway:
   
 my:
   greeting: hello world from config server
+  
+order_service:
+    url: http://localhost:8080/order-service/%s/orders
